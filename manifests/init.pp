@@ -41,6 +41,7 @@ class naginator {
 
     file {[ "/etc/nagios3/conf.d/nagios_command.cfg",
             "/etc/nagios3/conf.d/nagios_host.cfg",
+            "/etc/nagios3/conf.d/nagios_hostextinfo.cfg",
             "/etc/nagios3/conf.d/nagios_service.cfg", ]:
         ensure  => file,
         mode    => 0644,
