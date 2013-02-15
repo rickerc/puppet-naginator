@@ -66,29 +66,4 @@ class naginator {
         source => 'puppet:///modules/naginator/cgi.cfg',
     }
 
-    #
-    # nagios server monitors
-
-    @@nagios_host { $fqdn:
-        ensure  => present,
-        alias   => [ $hostname, "localhost", ],
-        address => $ipaddress,
-        use     => "generic-host",
-        notify  => Service["nagios3"],
-    }
-
-    @@nagios_service { "check_ntp_time_${hostname}":
-        check_command          => "check_ntp_time!$::company_ntp_server!1!3",
-        use                    => "generic-service",
-        host_name              => "localhost",
-        service_description    => "NTP",
-    }
-
-    @@nagios_service { "check_disks_${hostname}":
-        check_command       => "check_all_disks",
-        use                 => "generic-service",
-        host_name           => "localhost",
-        service_description => "Disk Space",
-    }
-
 }
