@@ -9,7 +9,7 @@
 
 class naginator {
 
-    package { [ "nagios3", "nagios-nrpe-plugin", "nagios-plugins", ]:
+    package { [ "nagios3", "nagios-nrpe-plugin", "nagios-plugins", "nagios3-doc", ]:
         ensure => installed,
     }
 
