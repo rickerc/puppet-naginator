@@ -58,6 +58,7 @@ class naginator {
         owner   => root,
         group   => root,
         source  => 'puppet:///modules/naginator/htpasswd.users',
+        require => Package["nagios3"],
     }
 
     file { "/etc/nagios3/cgi.cfg":
