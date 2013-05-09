@@ -9,7 +9,7 @@
 
 class naginator {
 
-    package { [ "nagios3", "nagios-nrpe-plugin", "nagios-plugins", ]:
+    package { [ "nagios3", "nagios-nrpe-plugin", "nagios-plugins", "nagios3-doc", ]:
         ensure => installed,
     }
 
@@ -49,6 +49,7 @@ class naginator {
         group   => root,
         replace => false,
         notify  => Service["nagios3"],
+        require => Package["nagios3"],
     }
 
     file { "/etc/nagios3/htpasswd.users":
@@ -57,14 +58,16 @@ class naginator {
         owner   => root,
         group   => root,
         source  => 'puppet:///modules/naginator/htpasswd.users',
+        require => Package["nagios3"],
     }
 
     file { "/etc/nagios3/cgi.cfg":
-        ensure => file,
-        mode   => 0644,
-        owner  => root,
-        group  => root,
-        source => 'puppet:///modules/naginator/cgi.cfg',
+        ensure  => file,
+        mode    => 0644,
+        owner   => root,
+        group   => root,
+        source  => 'puppet:///modules/naginator/cgi.cfg',
+        require => Package["nagios3"],
     }
 
 }
