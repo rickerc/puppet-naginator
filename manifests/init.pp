@@ -9,7 +9,7 @@
 
 class naginator {
 
-    package { [ "nagios3", "nagios-nrpe-plugin", "nagios-plugins", ]:
+    package { [ "nagios3", "nagios-nrpe-plugin", "nagios-plugins", "nagios3-doc", ]:
         ensure => installed,
     }
 
@@ -41,6 +41,7 @@ class naginator {
 
     file {[ "/etc/nagios3/conf.d/nagios_command.cfg",
             "/etc/nagios3/conf.d/nagios_host.cfg",
+            "/etc/nagios3/conf.d/nagios_hostextinfo.cfg",
             "/etc/nagios3/conf.d/nagios_service.cfg", ]:
         ensure  => file,
         mode    => 0644,
@@ -48,6 +49,7 @@ class naginator {
         group   => root,
         replace => false,
         notify  => Service["nagios3"],
+        require => Package["nagios3"],
     }
 
     file { "/etc/nagios3/htpasswd.users":
@@ -56,39 +58,16 @@ class naginator {
         owner   => root,
         group   => root,
         source  => 'puppet:///modules/naginator/htpasswd.users',
+        require => Package["nagios3"],
     }
 
     file { "/etc/nagios3/cgi.cfg":
-        ensure => file,
-        mode   => 0644,
-        owner  => root,
-        group  => root,
-        source => 'puppet:///modules/naginator/cgi.cfg',
-    }
-
-    #
-    # nagios server monitors
-
-    @@nagios_host { $fqdn:
-        ensure  => present,
-        alias   => [ $hostname, "localhost", ],
-        address => $ipaddress,
-        use     => "generic-host",
-        notify  => Service["nagios3"],
-    }
-
-    @@nagios_service { "check_ntp_time_${hostname}":
-        check_command          => "check_ntp_time!$::company_ntp_server!1!3",
-        use                    => "generic-service",
-        host_name              => "localhost",
-        service_description    => "NTP",
-    }
-
-    @@nagios_service { "check_disks_${hostname}":
-        check_command       => "check_all_disks",
-        use                 => "generic-service",
-        host_name           => "localhost",
-        service_description => "Disk Space",
+        ensure  => file,
+        mode    => 0644,
+        owner   => root,
+        group   => root,
+        source  => 'puppet:///modules/naginator/cgi.cfg',
+        require => Package["nagios3"],
     }
 
 }

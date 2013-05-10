@@ -89,13 +89,14 @@ class naginator::control_target {
         notify  => Service["nagios-nrpe-server"],
     }
 
-    # 
+    #
     # enable rabbitmq management HTTP API if not already enabled
 
     exec { "rabbitmq_management_enable":
-        command => "/usr/lib/rabbitmq/lib/rabbitmq_server-2.7.1/sbin/rabbitmq-plugins enable rabbitmq_management",
+        command => "/usr/lib/rabbitmq/bin/rabbitmq-plugins enable rabbitmq_management",
         unless  => "/bin/grep rabbitmq_management /etc/rabbitmq/enabled_plugins 2>/dev/null",
         notify  => Service["rabbitmq-server"],
+        require => Package["rabbitmq-server"],
     }
 
     @@nagios_service { "check_rabbitmq_aliveness_${hostname}":
